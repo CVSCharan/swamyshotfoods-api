@@ -9,9 +9,12 @@ export interface IMenu extends Document {
   name: string;
   price: number;
   desc: string;
+  timingTemplate?: string; // References TimingTemplate.key
   morningTimings?: ITimingSlot;
   eveningTimings?: ITimingSlot;
-  ingredients: string;
+  ingredients: string[];
+  allergens?: string[];
+  dietaryLabels: string[];
   priority: number;
   imgSrc: string;
   createdAt: Date;
@@ -31,9 +34,12 @@ const menuSchema = new Schema(
     name: { type: String, required: true },
     price: { type: Number, required: true },
     desc: { type: String, required: true },
+    timingTemplate: { type: String, default: null },
     morningTimings: { type: timingSlotSchema, default: null },
     eveningTimings: { type: timingSlotSchema, default: null },
-    ingredients: { type: String, required: true },
+    ingredients: { type: [String], required: true, default: [] },
+    allergens: { type: [String], default: [] },
+    dietaryLabels: { type: [String], default: ["vegetarian"] },
     priority: { type: Number, required: true },
     imgSrc: { type: String, required: true },
   },

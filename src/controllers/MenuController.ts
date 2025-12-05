@@ -64,4 +64,77 @@ export class MenuController {
       res.status(500).json({ error: (error as Error).message });
     }
   };
+
+  assignTemplate = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { templateKey } = req.body;
+      const menu = await this.menuService.assignTemplate(
+        req.params.id,
+        templateKey
+      );
+      if (!menu) {
+        res.status(404).json({ message: "Menu not found" });
+        return;
+      }
+      res.status(200).json(menu);
+    } catch (error) {
+      res.status(500).json({ error: (error as Error).message });
+    }
+  };
+
+  bulkAssignTemplate = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { menuIds, templateKey } = req.body;
+      const count = await this.menuService.bulkAssignTemplate(
+        menuIds,
+        templateKey
+      );
+      res.status(200).json({ message: `Updated ${count} items`, count });
+    } catch (error) {
+      res.status(500).json({ error: (error as Error).message });
+    }
+  };
+
+  setCustomTimings = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { morningTimings, eveningTimings } = req.body;
+      const menu = await this.menuService.setCustomTimings(
+        req.params.id,
+        morningTimings,
+        eveningTimings
+      );
+      if (!menu) {
+        res.status(404).json({ message: "Menu not found" });
+        return;
+      }
+      res.status(200).json(menu);
+    } catch (error) {
+      res.status(500).json({ error: (error as Error).message });
+    }
+  };
+
+  getAvailable = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const menus = await this.menuService.getAvailableMenus();
+      res.status(200).json(menus);
+    } catch (error) {
+      res.status(500).json({ error: (error as Error).message });
+    }
+  };
+
+  getByTimeSlot = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const slot = req.params.slot as "morning" | "evening";
+      if (slot !== "morning" && slot !== "evening") {
+        res
+          .status(400)
+          .json({ message: "Invalid slot. Use 'morning' or 'evening'" });
+        return;
+      }
+      const menus = await this.menuService.getMenusByTimeSlot(slot);
+      res.status(200).json(menus);
+    } catch (error) {
+      res.status(500).json({ error: (error as Error).message });
+    }
+  };
 }
