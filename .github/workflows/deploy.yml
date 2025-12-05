@@ -15,8 +15,9 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /var/www/swamyshotfoods-api
+            cd /var/www/swamyshotfoods/swamyshotfoods-api
             git pull origin main
             npm install
             npm run build
+            chmod +x scripts/deploy/deploy_app.sh
             ./scripts/deploy/deploy_app.sh
