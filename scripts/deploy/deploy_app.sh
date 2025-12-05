@@ -3,7 +3,7 @@
 # Exit on error
 set -e
 
-APP_DIR="/var/www/swamyshotfoods-api"
+APP_DIR="/var/www/swamyshotfoods/swamyshotfoods-api"
 PM2_APP_NAME="swamyshotfoods-api"
 
 # Ensure we are in the app directory
