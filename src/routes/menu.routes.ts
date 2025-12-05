@@ -151,4 +151,27 @@ router.put("/:id", authMiddleware, menuController.update);
  */
 router.delete("/:id", authMiddleware, menuController.delete);
 
+// Template assignment routes (admin only)
+router.put(
+  "/:id/assign-template",
+  authMiddleware,
+  menuController.assignTemplate
+);
+
+router.post(
+  "/bulk-assign-template",
+  authMiddleware,
+  menuController.bulkAssignTemplate
+);
+
+router.put(
+  "/:id/custom-timings",
+  authMiddleware,
+  menuController.setCustomTimings
+);
+
+// Availability query routes (public)
+router.get("/available/now", menuController.getAvailable);
+router.get("/available/:slot", menuController.getByTimeSlot);
+
 export default router;

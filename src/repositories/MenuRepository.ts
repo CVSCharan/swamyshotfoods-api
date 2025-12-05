@@ -22,4 +22,15 @@ export class MenuRepository implements IMenuRepository {
     const result = await Menu.findByIdAndDelete(id);
     return !!result;
   }
+
+  async bulkUpdate(ids: string[], data: Partial<IMenu>): Promise<number> {
+    const result = await Menu.updateMany({ _id: { $in: ids } }, data);
+    return result.modifiedCount;
+  }
+
+  async findByTimingTemplate(templateKey: string): Promise<IMenu[]> {
+    return await Menu.find({ timingTemplate: templateKey }).sort({
+      priority: 1,
+    });
+  }
 }
