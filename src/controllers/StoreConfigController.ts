@@ -1,5 +1,8 @@
 import { Request, Response } from "express";
 import { StoreConfigService } from "../services/StoreConfigService";
+import { EventBroadcast } from "../config/eventBroadcast";
+import { IStoreConfig } from "../models/StoreConfig";
+import Logger from "../config/logger";
 
 export class StoreConfigController {
   private service: StoreConfigService;
@@ -29,13 +32,16 @@ export class StoreConfigController {
   };
 
   sse = async (req: Request, res: Response): Promise<void> => {
+    // Set SSE headers
     res.setHeader("Content-Type", "text/event-stream");
     res.setHeader("Cache-Control", "no-cache");
     res.setHeader("Connection", "keep-alive");
+    res.setHeader("X-Accel-Buffering", "no"); // Disable nginx buffering
     res.flushHeaders();
 
-    const sendUpdate = async () => {
-      const config = await this.service.getConfig();
+    Logger.info("New SSE connection established");
+
+    const sendUpdate = async (config: IStoreConfig) => {
       const message = this.service.getShopMessage(config);
       const data = JSON.stringify({
         ...config.toObject(),
@@ -44,19 +50,38 @@ export class StoreConfigController {
       res.write(`data: ${data}\n\n`);
     };
 
-    // Send initial data
-    await sendUpdate();
+    try {
+      // Send initial data immediately
+      const initialConfig = await this.service.getConfig();
+      await sendUpdate(initialConfig);
+      Logger.info("Initial SSE data sent");
 
-    // Listen for updates
-    const listener = async () => {
-      await sendUpdate();
-    };
+      // Listen for updates from global EventBroadcast
+      const listener = async (config: IStoreConfig) => {
+        try {
+          await sendUpdate(config);
+          Logger.info("SSE update sent to client");
+        } catch (error) {
+          Logger.error("Error sending SSE update:", error);
+        }
+      };
 
-    this.service.on("updated", listener);
+      EventBroadcast.onStoreConfigUpdate(listener);
 
-    // Cleanup on disconnect
-    req.on("close", () => {
-      this.service.off("updated", listener);
-    });
+      // Heartbeat to keep connection alive (every 30 seconds)
+      const heartbeat = setInterval(() => {
+        res.write(": heartbeat\n\n");
+      }, 30000);
+
+      // Cleanup on disconnect
+      req.on("close", () => {
+        clearInterval(heartbeat);
+        EventBroadcast.offStoreConfigUpdate(listener);
+        Logger.info("SSE connection closed");
+      });
+    } catch (error) {
+      Logger.error("Error in SSE endpoint:", error);
+      res.end();
+    }
   };
 }

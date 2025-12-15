@@ -1,12 +1,11 @@
 import { IStoreConfig } from "../models/StoreConfig";
 import { StoreConfigRepository } from "../repositories/StoreConfigRepository";
-import { EventEmitter } from "events";
+import { EventBroadcast } from "../config/eventBroadcast";
 
-export class StoreConfigService extends EventEmitter {
+export class StoreConfigService {
   private repository: StoreConfigRepository;
 
   constructor(repository: StoreConfigRepository) {
-    super();
     this.repository = repository;
   }
 
@@ -31,8 +30,8 @@ export class StoreConfigService extends EventEmitter {
 
     const newConfig = await this.repository.updateConfig(update);
 
-    // Emit event for SSE
-    this.emit("updated", newConfig);
+    // Emit event for SSE - broadcast to all connected clients
+    EventBroadcast.emitStoreConfigUpdate(newConfig);
 
     return newConfig;
   }
