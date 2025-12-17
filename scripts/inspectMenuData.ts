@@ -29,7 +29,7 @@ const inspectMenuData = async () => {
 
       // Also get one complete item to see all fields
       console.log("\n--- Complete First Item (All Fields) ---\n");
-      const firstItem = menuItems[0].toObject();
+      const firstItem = menuItems[0].toObject() as Record<string, any>;
       console.log("Fields present in document:");
       Object.keys(firstItem).forEach((key) => {
         console.log(
