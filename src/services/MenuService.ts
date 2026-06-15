@@ -132,7 +132,7 @@ export class MenuService implements IMenuService {
     const allMenus = await this.menuRepository.findAll();
     const searchTerm = ingredientName.toLowerCase();
     return allMenus.filter((menu) =>
-      menu.ingredients.some((ing) => ing.toLowerCase().includes(searchTerm))
+      menu.ingredients.toLowerCase().includes(searchTerm)
     );
   }
 }
