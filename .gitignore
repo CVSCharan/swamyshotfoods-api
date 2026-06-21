@@ -134,5 +134,10 @@ dist
 
 # Uploads
 uploads/
+
+# deployment-manual
 deployment-manual.md
+
+# ssh-public-key
 ssh-public-key.txt
+

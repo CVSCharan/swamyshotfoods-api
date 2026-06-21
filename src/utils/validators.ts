@@ -87,4 +87,10 @@ export const storeConfigValidation = [
     .optional()
     .isString()
     .withMessage("description must be a string"),
+  body("ownerAvatarUrl")
+    .optional()
+    .isString()
+    .withMessage("ownerAvatarUrl must be a string")
+    .isLength({ max: 3000000 })
+    .withMessage("ownerAvatarUrl is too large (max 3 million characters)"),
 ];

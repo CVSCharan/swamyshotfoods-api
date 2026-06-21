@@ -8,6 +8,7 @@ export interface IStoreConfig extends Document {
   isNoticeActive: boolean;
   noticeMessage: string;
   description: string;
+  ownerAvatarUrl: string;
   updatedAt: Date;
 }
 
@@ -22,6 +23,10 @@ const storeConfigSchema = new Schema(
     description: {
       type: String,
       default: "Swamy's Hot Foods is a pure veg destination.",
+    },
+    ownerAvatarUrl: {
+      type: String,
+      default: "", // Will hold the Base64 string
     },
   },
   {

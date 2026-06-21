@@ -1,0 +1,142 @@
+[dotenv@17.2.3] injecting env (3) from .env -- tip: 🗂️ backup and recover secrets: https://dotenvx.com/ops
+Connected to MongoDB
+
+--- OLDEST MENU DOCUMENTS (Old Schema) ---
+[
+  {
+    "_id": "678a1c759108930d7e39ec78",
+    "name": "Idly with chutney (4 pieces) ",
+    "price": 60,
+    "desc": "\n\n",
+    "imgSrc": "https://res.cloudinary.com/de5zjl8q4/image/upload/v1737308996/IMG-20250119-WA0007_weqvph.jpg",
+    "createdAt": "2025-01-17T09:01:41.867Z",
+    "updatedAt": "2025-12-18T06:42:43.301Z",
+    "__v": 0,
+    "priority": 1,
+    "timings": "𝗔𝘃𝗮𝗶𝗹𝗮𝗯𝗹𝗲 𝘁𝗶𝗺𝗶𝗻𝗴𝘀 : Morning - 5.30 to 10am & Evening - 4.30 to 𝟪.𝟥𝟢𝘱𝘮",
+    "ingredients": [
+      "Hjnhbbhnnnnbbbbbbbbvbbgbvvbbhbbbbbbnnbbbbvbbnbv b bnnbbnn nnnnbnnnn nnnnnn nnnnnn"
+    ],
+    "eveningTimings": {
+      "startTime": "4:3pm",
+      "endTime": "0:00pm"
+    },
+    "morningTimings": {
+      "startTime": "5:30am",
+      "endTime": "10:00am"
+    },
+    "dietaryLabels": [
+      "vegetarian",
+      "vegan",
+      "jain",
+      "gluten-free"
+    ],
+    "allergens": [],
+    "timingTemplate": null
+  },
+  {
+    "_id": "678a1f029108930d7e39ec7c",
+    "name": "Medu vada (4 pieces) ",
+    "price": 60,
+    "desc": "Crispy vada ",
+    "imgSrc": "https://res.cloudinary.com/de5zjl8q4/image/upload/v1737222691/IMG-20250107-WA0051_f8acso.jpg",
+    "createdAt": "2025-01-17T09:12:34.173Z",
+    "updatedAt": "2025-12-11T14:10:53.209Z",
+    "__v": 0,
+    "priority": 2,
+    "timings": "𝗔𝘃𝗮𝗶𝗹𝗮𝗯𝗹𝗲 𝘁𝗶𝗺𝗶𝗻𝗴𝘀 : morning - 5.45 to 9.30am &:evening - 4.45 to 7.30pm.",
+    "ingredients": [
+      "Urad dal",
+      "Little bit chana dal",
+      "Tata salt",
+      "Chilly flakes",
+      "Curry leaves",
+      "Sunflower oil"
+    ],
+    "eveningTimings": {
+      "startTime": "4:45pm",
+      "endTime": "7:30pm"
+    },
+    "morningTimings": {
+      "startTime": "5:45am",
+      "endTime": "9:30am"
+    },
+    "allergens": [],
+    "dietaryLabels": [
+      "vegetarian",
+      "vegan",
+      "jain",
+      "gluten-free"
+    ]
+  }
+]
+
+--- NEWEST MENU DOCUMENTS (Potentially New Schema) ---
+[
+  {
+    "_id": "6791f5bfc362f998899b541a",
+    "name": "Coconut chutney & onion chutney ingredients",
+    "price": 0,
+    "desc": "",
+    "timings": "",
+    "ingredients": [
+      "Raw coconut",
+      "Bengal gram",
+      "Green chilly",
+      "Raw salt",
+      "Tamarind",
+      "Curry leaves",
+      "Chopped ginger",
+      "Musturd seeds",
+      "Cumin",
+      "Dried red chilly",
+      "Asafoetida",
+      "Fresh lemon juice"
+    ],
+    "priority": 20,
+    "imgSrc": "https://res.cloudinary.com/de5zjl8q4/image/upload/v1737653884/IMG-20250123-WA0019_cmf3ds.jpg\n\n",
+    "createdAt": "2025-01-23T07:54:39.538Z",
+    "updatedAt": "2025-12-11T14:10:53.794Z",
+    "__v": 0,
+    "allergens": [],
+    "dietaryLabels": [
+      "vegetarian",
+      "vegan",
+      "jain",
+      "gluten-free"
+    ]
+  },
+  {
+    "_id": "678cdd30cf22ceabbc859d8e",
+    "name": "Uttappam",
+    "price": 60,
+    "desc": "Thick dosa with garnish.    \n\n\n𝗽𝗿𝗲𝗽𝗮𝗿𝗮𝘁𝗶𝗼𝗻 𝘁𝗶𝗺𝗲 : 𝟣𝟧𝘮𝘪𝘯𝘴",
+    "imgSrc": "https://res.cloudinary.com/de5zjl8q4/image/upload/v1737701829/IMG_20250124_081512_yxfg4a.jpg",
+    "createdAt": "2025-01-19T11:08:32.041Z",
+    "updatedAt": "2025-12-11T14:10:53.751Z",
+    "__v": 0,
+    "priority": 19,
+    "timings": "𝗔𝘃𝗮𝗶𝗹𝗮𝗯𝗹𝗲 𝘁𝗶𝗺𝗶𝗻𝗴𝘀 : 𝘔𝘰𝘳𝘯𝘪𝘯𝘨 - 𝟪 𝘵𝘰 𝘵𝘪𝘭𝘭 𝘴𝘩𝘰𝘱 𝘤𝘭𝘰𝘴𝘪𝘯𝘨 & 𝘌𝘷𝘦𝘯𝘪𝘯𝘨 - 𝟧.𝟦𝟧 𝘵𝘰 𝘵𝘪𝘭𝘭 𝘴𝘩𝘰𝘱 𝘤𝘭𝘰𝘴𝘪𝘯𝘨.",
+    "ingredients": [
+      "Raw rice",
+      "Raw boiled rice",
+      "Little bit fenugreek seeds",
+      "Urad dal",
+      "Chopped onions",
+      "Green chilles",
+      "Ginger",
+      "Curry leaves..fried with sunflower oil"
+    ],
+    "eveningTimings": null,
+    "morningTimings": null,
+    "allergens": [],
+    "dietaryLabels": [
+      "vegetarian",
+      "vegan",
+      "jain",
+      "gluten-free"
+    ]
+  }
+]
+
+Disconnected from MongoDB
