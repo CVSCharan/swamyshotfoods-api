@@ -87,6 +87,10 @@ export const storeConfigValidation = [
     .optional()
     .isString()
     .withMessage("description must be a string"),
+  body("menuFooterMessage")
+    .optional()
+    .isString()
+    .withMessage("menuFooterMessage must be a string"),
   body("ownerAvatarUrl")
     .optional()
     .isString()
