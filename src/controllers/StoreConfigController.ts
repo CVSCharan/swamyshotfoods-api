@@ -41,7 +41,7 @@ export class StoreConfigController {
 
     Logger.info("New SSE connection established");
 
-    const sendUpdate = async (config: IStoreConfig) => {
+    const sendUpdate = (config: IStoreConfig) => {
       const message = this.service.getShopMessage(config);
       const data = JSON.stringify({
         ...config.toObject(),
@@ -53,13 +53,13 @@ export class StoreConfigController {
     try {
       // Send initial data immediately
       const initialConfig = await this.service.getConfig();
-      await sendUpdate(initialConfig);
+      sendUpdate(initialConfig);
       Logger.info("Initial SSE data sent");
 
       // Listen for updates from global EventBroadcast
-      const listener = async (config: IStoreConfig) => {
+      const listener = (config: IStoreConfig) => {
         try {
-          await sendUpdate(config);
+          sendUpdate(config);
           Logger.info("SSE update sent to client");
         } catch (error) {
           Logger.error("Error sending SSE update:", error);
