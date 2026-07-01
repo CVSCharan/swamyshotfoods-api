@@ -32,6 +32,7 @@ interface StoreConfig {
   noticeMessage: string;
   description: string;
   currentStatusMsg: string;
+  cookingImageUrl?: string;
 }
 
 interface StoreConfigStore {
@@ -297,6 +298,7 @@ export interface StoreConfig {
   noticeMessage: string;
   description: string;
   currentStatusMsg: string;
+  cookingImageUrl?: string;
 }
 ```
 
