@@ -1,12 +1,37 @@
 import { IMenu } from "../models/Menu";
 import { IMenuRepository } from "../interfaces/IMenuRepository";
+import { ITimingTemplateRepository } from "../interfaces/ITimingTemplateRepository";
 import { IMenuService } from "../interfaces/IMenuService";
 
 export class MenuService implements IMenuService {
   private menuRepository: IMenuRepository;
+  private timingTemplateRepository: ITimingTemplateRepository;
 
-  constructor(menuRepository: IMenuRepository) {
+  constructor(
+    menuRepository: IMenuRepository,
+    timingTemplateRepository: ITimingTemplateRepository
+  ) {
     this.menuRepository = menuRepository;
+    this.timingTemplateRepository = timingTemplateRepository;
+  }
+
+  private async resolveMenuTimings(menu: IMenu): Promise<IMenu> {
+    const resolvedMenu = (menu as any).toObject ? (menu as any).toObject() : { ...menu };
+
+    if (resolvedMenu.timingTemplate) {
+      const template = await this.timingTemplateRepository.findByKey(
+        resolvedMenu.timingTemplate
+      );
+      if (template && template.isActive) {
+        resolvedMenu.morningTimings = template.morningTimings;
+        resolvedMenu.eveningTimings = template.eveningTimings;
+      }
+    }
+    return resolvedMenu as IMenu;
+  }
+
+  private async resolveMenusTimings(menus: IMenu[]): Promise<IMenu[]> {
+    return await Promise.all(menus.map((m) => this.resolveMenuTimings(m)));
   }
 
   async createMenu(menuData: Partial<IMenu>): Promise<IMenu> {
@@ -14,11 +39,14 @@ export class MenuService implements IMenuService {
   }
 
   async getAllMenus(): Promise<IMenu[]> {
-    return await this.menuRepository.findAll();
+    const menus = await this.menuRepository.findAll();
+    return await this.resolveMenusTimings(menus);
   }
 
   async getMenuById(id: string): Promise<IMenu | null> {
-    return await this.menuRepository.findById(id);
+    const menu = await this.menuRepository.findById(id);
+    if (!menu) return null;
+    return await this.resolveMenuTimings(menu);
   }
 
   async updateMenu(
@@ -68,11 +96,13 @@ export class MenuService implements IMenuService {
 
   async getAvailableMenus(currentTime?: Date): Promise<IMenu[]> {
     const allMenus = await this.menuRepository.findAll();
+    const resolvedMenus = await this.resolveMenusTimings(allMenus);
+    
     const now = currentTime || new Date();
     const currentHour = now.getHours();
     const currentMinute = now.getMinutes();
 
-    return allMenus.filter((menu) => {
+    return resolvedMenus.filter((menu) => {
       if (!menu.morningTimings && !menu.eveningTimings) return false;
 
       const isAvailable = (slot: { startTime: string; endTime: string }) => {
@@ -92,15 +122,15 @@ export class MenuService implements IMenuService {
 
   async getMenusByTimeSlot(slot: "morning" | "evening"): Promise<IMenu[]> {
     const allMenus = await this.menuRepository.findAll();
+    const resolvedMenus = await this.resolveMenusTimings(allMenus);
 
-    return allMenus.filter((menu) => {
+    return resolvedMenus.filter((menu) => {
       if (slot === "morning") return !!menu.morningTimings;
       return !!menu.eveningTimings;
     });
   }
 
   private parseTime(timeStr: string): number {
-    // Parse time strings like "5:30am", "10:00am", "4:30pm", "8:30pm"
     const match = timeStr.match(/(\d+):?(\d+)?\s*(am|pm)/i);
     if (!match) return 0;
 
@@ -116,22 +146,28 @@ export class MenuService implements IMenuService {
 
   async getMenusByDietaryLabel(label: string): Promise<IMenu[]> {
     const allMenus = await this.menuRepository.findAll();
-    return allMenus.filter((menu) =>
+    const resolvedMenus = await this.resolveMenusTimings(allMenus);
+    
+    return resolvedMenus.filter((menu) =>
       menu.dietaryLabels.some((l) => l.toLowerCase() === label.toLowerCase())
     );
   }
 
   async getAllergenFreeMenus(): Promise<IMenu[]> {
     const allMenus = await this.menuRepository.findAll();
-    return allMenus.filter(
+    const resolvedMenus = await this.resolveMenusTimings(allMenus);
+    
+    return resolvedMenus.filter(
       (menu) => !menu.allergens || menu.allergens.length === 0
     );
   }
 
   async searchByIngredient(ingredientName: string): Promise<IMenu[]> {
     const allMenus = await this.menuRepository.findAll();
+    const resolvedMenus = await this.resolveMenusTimings(allMenus);
+    
     const searchTerm = ingredientName.toLowerCase();
-    return allMenus.filter((menu) =>
+    return resolvedMenus.filter((menu) =>
       menu.ingredients.toLowerCase().includes(searchTerm)
     );
   }

@@ -2,6 +2,7 @@ import { Router } from "express";
 import { MenuController } from "../controllers/MenuController";
 import { MenuService } from "../services/MenuService";
 import { MenuRepository } from "../repositories/MenuRepository";
+import { TimingTemplateRepository } from "../repositories/TimingTemplateRepository";
 import { authMiddleware } from "../middleware/auth.middleware";
 import { menuValidation } from "../utils/validators";
 import { validate } from "../middleware/validate.middleware";
@@ -10,7 +11,8 @@ const router = Router();
 
 // Manual Dependency Injection
 const menuRepository = new MenuRepository();
-const menuService = new MenuService(menuRepository);
+const timingTemplateRepository = new TimingTemplateRepository();
+const menuService = new MenuService(menuRepository, timingTemplateRepository);
 const menuController = new MenuController(menuService);
 
 /**
