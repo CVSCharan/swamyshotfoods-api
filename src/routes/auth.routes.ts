@@ -4,6 +4,8 @@ import { AuthService } from "../services/AuthService";
 import { UserRepository } from "../repositories/UserRepository";
 import { registerValidation, loginValidation } from "../utils/validators";
 import { validate } from "../middleware/validate.middleware";
+import { authMiddleware } from "../middleware/auth.middleware";
+import { roleMiddleware } from "../middleware/role.middleware";
 
 const router = Router();
 
@@ -51,7 +53,7 @@ const authController = new AuthController(authService);
  *       500:
  *         description: Server error
  */
-router.post("/register", registerValidation, validate, authController.register);
+router.post("/register", authMiddleware, roleMiddleware(["admin"]), registerValidation, validate, authController.register);
 
 /**
  * @swagger

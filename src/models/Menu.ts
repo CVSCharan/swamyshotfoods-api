@@ -17,6 +17,8 @@ export interface IMenu extends Document {
   dietaryLabels: string[];
   priority: number;
   imgSrc: string;
+  morningSpecial?: boolean;
+  eveningSpecial?: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -42,6 +44,8 @@ const menuSchema = new Schema(
     dietaryLabels: { type: [String], default: ["vegetarian"] },
     priority: { type: Number, required: true },
     imgSrc: { type: String, required: true },
+    morningSpecial: { type: Boolean, default: false },
+    eveningSpecial: { type: Boolean, default: false },
   },
   {
     timestamps: true,

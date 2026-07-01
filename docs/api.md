@@ -109,9 +109,11 @@ Retrieve a list of all menu items.
         "endTime": "12:00"
       },
       "eveningTimings": null,
-      "ingredients": ["Rice", "Urad Dal", "Salt"],
+      "ingredients": "Rice, Urad Dal, Salt",
       "allergens": [],
       "dietaryLabels": ["vegetarian", "vegan", "gluten-free"],
+      "morningSpecial": true,
+      "eveningSpecial": false,
       "priority": 1,
       "imgSrc": "https://example.com/idli.jpg",
       "createdAt": "2024-01-01T00:00:00.000Z",
@@ -158,9 +160,11 @@ Create a new menu item.
       "startTime": "17:45",
       "endTime": "21:30"
     },
-    "ingredients": ["Rice batter", "Oil"],
+    "ingredients": "Rice batter, Oil",
     "allergens": [],  // Optional
     "dietaryLabels": ["vegetarian"],  // Optional, defaults to ["vegetarian"]
+    "morningSpecial": false,
+    "eveningSpecial": false,
     "priority": 2,
     "imgSrc": "https://example.com/dosa.jpg"
   }
@@ -499,9 +503,11 @@ Delete a timing template.
     startTime: string;
     endTime: string;
   };
-  ingredients: string[];
+  ingredients: string;
   allergens?: string[];
   dietaryLabels: string[];  // e.g., ["vegetarian", "vegan", "gluten-free"]
+  morningSpecial?: boolean;
+  eveningSpecial?: boolean;
   priority: number;
   imgSrc: string;
   createdAt: Date;

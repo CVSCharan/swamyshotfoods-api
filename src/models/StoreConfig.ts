@@ -10,6 +10,7 @@ export interface IStoreConfig extends Document {
   description: string;
   menuFooterMessage: string;
   ownerAvatarUrl: string;
+  cookingImageUrl: string;
   updatedAt: Date;
 }
 
@@ -32,6 +33,10 @@ const storeConfigSchema = new Schema(
     ownerAvatarUrl: {
       type: String,
       default: "", // Will hold the Base64 string
+    },
+    cookingImageUrl: {
+      type: String,
+      default: "", // Will hold the Base64 string for the cooking status GIF/Image
     },
   },
   {
