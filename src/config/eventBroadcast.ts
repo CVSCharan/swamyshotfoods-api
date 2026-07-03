@@ -1,6 +1,7 @@
 import { EventEmitter } from "events";
 import Logger from "./logger";
 import { IStoreConfig } from "../models/StoreConfig";
+import StoreConfig from "../models/StoreConfig";
 
 /**
  * Singleton Event Broadcast Service
@@ -8,6 +9,7 @@ import { IStoreConfig } from "../models/StoreConfig";
  */
 class EventBroadcastService extends EventEmitter {
   private static instance: EventBroadcastService;
+  private hasChangeStream: boolean = false;
 
   private constructor() {
     super();
@@ -27,12 +29,56 @@ class EventBroadcastService extends EventEmitter {
   }
 
   /**
-   * Emit a store config update event
+   * Initialize MongoDB Change Stream to listen for StoreConfig updates
+   * This guarantees that updates from ANY instance (or manual DB edits)
+   * are broadcast to SSE clients connected to this specific instance.
+   */
+  initChangeStream(): void {
+    Logger.info("Initializing MongoDB Change Stream for StoreConfig...");
+    try {
+      const changeStream = StoreConfig.watch();
+
+      changeStream.on("change", async (change) => {
+        if (
+          change.operationType === "update" ||
+          change.operationType === "replace" ||
+          change.operationType === "insert"
+        ) {
+          Logger.info(`StoreConfig modified in DB (${change.operationType}). Broadcasting to SSE clients.`);
+          
+          // Fetch the latest full document
+          const latestConfig = await StoreConfig.findOne();
+          if (latestConfig) {
+            this.emit("storeConfig:updated", latestConfig);
+          }
+        }
+      });
+
+      this.hasChangeStream = true;
+
+      changeStream.on("error", (error) => {
+        Logger.error("MongoDB Change Stream Error:", error);
+        this.hasChangeStream = false;
+      });
+    } catch (error) {
+      Logger.error("Failed to initialize MongoDB Change Stream. Falling back to local events:", error);
+      this.hasChangeStream = false;
+    }
+  }
+
+  /**
+   * Emit a store config update event (Legacy, mainly used internally now)
    * @param config - The updated store configuration
    */
   emitStoreConfigUpdate(config: IStoreConfig): void {
-    Logger.info("Broadcasting storeConfig:updated event");
-    this.emit("storeConfig:updated", config);
+    // If change streams are active, we don't need to manually emit, as the watch() will catch it.
+    // We only emit locally if change streams failed to initialize (e.g., local standalone MongoDB).
+    if (!this.hasChangeStream) {
+      Logger.info("Broadcasting storeConfig:updated event (Local Fallback)");
+      this.emit("storeConfig:updated", config);
+    } else {
+      Logger.info("Skipping local emit; relying on MongoDB Change Stream");
+    }
   }
 
   /**
