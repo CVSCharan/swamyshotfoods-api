@@ -14,7 +14,7 @@ export class StoreConfigRepository {
     if (!config) {
       config = await StoreConfig.create(update);
     } else {
-      Object.assign(config, update);
+      config.set(update);
       await config.save();
     }
     return config;
