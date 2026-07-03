@@ -56,6 +56,11 @@ export const menuValidation = [
   body("ingredients").trim().notEmpty().withMessage("Ingredients are required"),
   body("priority").isInt().withMessage("Priority must be an integer"),
   body("imgSrc").isURL().withMessage("Image source must be a valid URL"),
+  body("timingTemplate").optional({ nullable: true, checkFalsy: true }).isString(),
+  body("allergens").optional().isArray(),
+  body("dietaryLabels").optional().isArray(),
+  body("morningSpecial").optional().isBoolean(),
+  body("eveningSpecial").optional().isBoolean(),
 ];
 
 export const storeConfigValidation = [
@@ -97,4 +102,10 @@ export const storeConfigValidation = [
     .withMessage("ownerAvatarUrl must be a string")
     .isLength({ max: 3000000 })
     .withMessage("ownerAvatarUrl is too large (max 3 million characters)"),
+  body("cookingImageUrl")
+    .optional()
+    .isString()
+    .withMessage("cookingImageUrl must be a string")
+    .isLength({ max: 3000000 })
+    .withMessage("cookingImageUrl is too large (max 3 million characters)"),
 ];
