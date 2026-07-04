@@ -10,13 +10,11 @@ export class StoreConfigRepository {
   }
 
   async updateConfig(update: Partial<IStoreConfig>): Promise<IStoreConfig> {
-    let config = await StoreConfig.findOne();
-    if (!config) {
-      config = await StoreConfig.create(update);
-    } else {
-      config.set(update);
-      await config.save();
-    }
+    const config = await StoreConfig.findOneAndUpdate({}, update, {
+      new: true,
+      upsert: true,
+      setDefaultsOnInsert: true,
+    });
     return config;
   }
 }
