@@ -29,6 +29,6 @@ The API follows a strict 3-tier architecture:
 - Admin roles are required for `PUT` and `POST` actions to modify store configuration or menus.
 
 ## Context Retrieval for AI Assistants
-- **Menu Resolution**: `MenuService.ts` dynamically resolves `TimingTemplates` to calculate if an item is available now.
+- **Menu Resolution**: `MenuService.ts` dynamically resolves `TimingTemplates` to calculate if an item is available now. Time comparisons explicitly use IST (`Asia/Kolkata`) regardless of the server's local machine time to ensure synchronization with real-world restaurant hours.
 - **Validation**: Strict express-validator rules reside in `utils/validators.ts`. Ensure fields are optional if they accept partial updates.
 - **Persistence Bugs**: When updating Mongoose models with partial data, always use `Document.set()` rather than `Object.assign()` to ensure Mongoose change tracking marks the fields as dirty.
