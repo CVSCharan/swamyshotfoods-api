@@ -39,11 +39,8 @@ export class StoreConfigService {
   getShopMessage(config: IStoreConfig): string {
     // Convert server time to Indian Standard Time (IST)
     const now = new Date();
-    const utcOffsetMinutes = now.getTimezoneOffset();
-    const istOffsetMinutes = 330; // IST is UTC+5:30
-    const istTime = new Date(
-      now.getTime() + (istOffsetMinutes - utcOffsetMinutes) * 60 * 1000
-    );
+    const istTimeStr = now.toLocaleString("en-US", { timeZone: "Asia/Kolkata" });
+    const istTime = new Date(istTimeStr);
 
     const currentDay = istTime.getDay(); // 0 (Sunday) to 6 (Saturday)
     const currentHours = istTime.getHours();
@@ -60,7 +57,7 @@ export class StoreConfigService {
 
     let message = "";
 
-    if (currentDay === 6 && currentTime > eveningClosingSoon) {
+    if (currentDay === 6 && currentTime > eveningClose) {
       return "☀️ Sunday's Holiday";
     }
 

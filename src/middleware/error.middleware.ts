@@ -14,8 +14,8 @@ export const errorHandler = (
   );
 
   res.status(err.status || 500).json({
-    success: false,
-    message: err.message || "Internal Server Error",
+    error: err.message || "Internal Server Error",
+    ...(err.message && err.message !== "Internal Server Error" ? { message: "An error occurred while processing the request" } : {}),
     ...(process.env.NODE_ENV === "development" && { stack: err.stack }),
   });
 };

@@ -99,8 +99,11 @@ export class MenuService implements IMenuService {
     const resolvedMenus = await this.resolveMenusTimings(allMenus);
     
     const now = currentTime || new Date();
-    const currentHour = now.getHours();
-    const currentMinute = now.getMinutes();
+    // Convert to IST to match Shop Config logic
+    const istTimeStr = now.toLocaleString("en-US", { timeZone: "Asia/Kolkata" });
+    const istTime = new Date(istTimeStr);
+    const currentHour = istTime.getHours();
+    const currentMinute = istTime.getMinutes();
 
     return resolvedMenus.filter((menu) => {
       if (!menu.morningTimings && !menu.eveningTimings) return false;
@@ -131,12 +134,13 @@ export class MenuService implements IMenuService {
   }
 
   private parseTime(timeStr: string): number {
-    const match = timeStr.match(/(\d+):?(\d+)?\s*(am|pm)/i);
+    // Support both "08:30" (24-hour) and "8:30 am" (12-hour)
+    const match = timeStr.match(/(\d+):?(\d+)?\s*(am|pm)?/i);
     if (!match) return 0;
 
     let hours = parseInt(match[1]);
     const minutes = match[2] ? parseInt(match[2]) : 0;
-    const period = match[3].toLowerCase();
+    const period = match[3] ? match[3].toLowerCase() : null;
 
     if (period === "pm" && hours !== 12) hours += 12;
     if (period === "am" && hours === 12) hours = 0;

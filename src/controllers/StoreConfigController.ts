@@ -11,23 +11,23 @@ export class StoreConfigController {
     this.service = service;
   }
 
-  getConfig = async (req: Request, res: Response): Promise<void> => {
+  getConfig = async (req: Request, res: Response, next: import("express").NextFunction): Promise<void> => {
     try {
       const config = await this.service.getConfig();
       const message = this.service.getShopMessage(config);
       res.status(200).json({ ...config.toObject(), currentStatusMsg: message });
     } catch (error) {
-      res.status(500).json({ error: (error as Error).message });
+      next(error);
     }
   };
 
-  updateConfig = async (req: Request, res: Response): Promise<void> => {
+  updateConfig = async (req: Request, res: Response, next: import("express").NextFunction): Promise<void> => {
     try {
       const config = await this.service.updateConfig(req.body);
       const message = this.service.getShopMessage(config);
       res.status(200).json({ ...config.toObject(), currentStatusMsg: message });
     } catch (error) {
-      res.status(500).json({ error: (error as Error).message });
+      next(error);
     }
   };
 
