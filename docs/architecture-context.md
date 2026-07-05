@@ -23,6 +23,7 @@ The API follows a strict 3-tier architecture:
 - **EventBroadcast.ts**: Emits Node.js events when `StoreConfig` is updated via PUT.
 - **SSE Endpoint (`/api/store-config/sse`)**: Streams live updates to all connected clients (Web App, PWA).
   - *Note on Scaling*: The current `EventEmitter` is in-memory. If this API scales horizontally (multiple instances), it requires upgrading to MongoDB Change Streams to broadcast across instances.
+  - *Note on Mobile Caching*: Client applications rely heavily on this SSE endpoint in combination with the Page Visibility API to fetch fresh data on resume, avoiding stale caches.
 
 ### 3. Authentication
 - Uses standard JWT authentication (`AuthService.ts`).

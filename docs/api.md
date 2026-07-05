@@ -113,6 +113,7 @@ Retrieve a list of all menu items.
       "allergens": [],
       "dietaryLabels": ["vegetarian", "vegan", "gluten-free"],
       "morningSpecial": true,
+      "dosaSpecial": false,
       "eveningSpecial": false,
       "priority": 1,
       "imgSrc": "https://example.com/idli.jpg",

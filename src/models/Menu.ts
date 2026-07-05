@@ -19,6 +19,7 @@ export interface IMenu extends Document {
   imgSrc: string;
   morningSpecial?: boolean;
   eveningSpecial?: boolean;
+  dosaSpecial?: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -46,6 +47,7 @@ const menuSchema = new Schema(
     imgSrc: { type: String, required: true },
     morningSpecial: { type: Boolean, default: false },
     eveningSpecial: { type: Boolean, default: false },
+    dosaSpecial: { type: Boolean, default: false },
   },
   {
     timestamps: true,
