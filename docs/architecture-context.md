@@ -19,7 +19,7 @@ The API follows a strict 3-tier architecture:
 - **Repositories**: Handle direct database CRUD operations using Mongoose.
 
 ### 2. State Synchronization (SSE & StoreConfig)
-- **StoreConfig**: Contains global settings like `isShopOpen`, `isCooking`, `menuFooterMessage`.
+- **StoreConfig**: Contains global settings like `isShopOpen`, `isCooking`, `menuHeaderMessage`, `menuFooterMessage`.
 - **EventBroadcast.ts**: Emits Node.js events when `StoreConfig` is updated via PUT.
 - **SSE Endpoint (`/api/store-config/sse`)**: Streams live updates to all connected clients (Web App, PWA).
   - *Note on Scaling*: The current `EventEmitter` is in-memory. If this API scales horizontally (multiple instances), it requires upgrading to MongoDB Change Streams to broadcast across instances.
@@ -30,6 +30,6 @@ The API follows a strict 3-tier architecture:
 - Admin roles are required for `PUT` and `POST` actions to modify store configuration or menus.
 
 ## Context Retrieval for AI Assistants
-- **Menu Resolution**: `MenuService.ts` dynamically resolves `TimingTemplates` to calculate if an item is available now. Time comparisons explicitly use IST (`Asia/Kolkata`) regardless of the server's local machine time to ensure synchronization with real-world restaurant hours.
+- **Menu Resolution**: `MenuService.ts` dynamically resolves `TimingTemplates` to calculate if an item is available now. Time comparisons explicitly use IST (`Asia/Kolkata`) regardless of the server's local machine time to ensure synchronization with real-world restaurant hours. Menu flags like `morningSpecial`, `eveningSpecial`, and `dosaSpecial` are static markers.
 - **Validation**: Strict express-validator rules reside in `utils/validators.ts`. Ensure fields are optional if they accept partial updates.
 - **Persistence Bugs**: When updating Mongoose models with partial data, always use `Document.set()` rather than `Object.assign()` to ensure Mongoose change tracking marks the fields as dirty.
