@@ -96,16 +96,53 @@ export const storeConfigValidation = [
     .optional()
     .isString()
     .withMessage("menuFooterMessage must be a string"),
+  body("menuHeaderMessage")
+    .optional()
+    .isString()
+    .withMessage("menuHeaderMessage must be a string"),
   body("ownerAvatarUrl")
     .optional()
     .isString()
     .withMessage("ownerAvatarUrl must be a string")
-    .isLength({ max: 3000000 })
-    .withMessage("ownerAvatarUrl is too large (max 3 million characters)"),
+    .isLength({ max: 15000000 })
+    .withMessage("ownerAvatarUrl is too large (max 15 million characters)"),
   body("cookingImageUrl")
     .optional()
     .isString()
     .withMessage("cookingImageUrl must be a string")
-    .isLength({ max: 3000000 })
-    .withMessage("cookingImageUrl is too large (max 3 million characters)"),
+    .isLength({ max: 15000000 })
+    .withMessage("cookingImageUrl is too large (max 15 million characters)"),
+];
+
+export const timingTemplateValidation = [
+  body("name").trim().notEmpty().withMessage("Name is required"),
+  body("key").trim().notEmpty().withMessage("Key is required"),
+  body("morningTimings")
+    .optional({ nullable: true })
+    .isObject()
+    .withMessage("Morning timings must be an object"),
+  body("morningTimings.startTime")
+    .optional()
+    .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)
+    .withMessage("Start time must be in HH:MM format"),
+  body("morningTimings.endTime")
+    .optional()
+    .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)
+    .withMessage("End time must be in HH:MM format"),
+  body("eveningTimings")
+    .optional({ nullable: true })
+    .isObject()
+    .withMessage("Evening timings must be an object"),
+  body("eveningTimings.startTime")
+    .optional()
+    .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)
+    .withMessage("Start time must be in HH:MM format"),
+  body("eveningTimings.endTime")
+    .optional()
+    .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)
+    .withMessage("End time must be in HH:MM format"),
+  body("isActive")
+    .optional()
+    .isBoolean()
+    .withMessage("isActive must be a boolean"),
 ];

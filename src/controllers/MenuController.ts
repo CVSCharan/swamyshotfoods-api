@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import { IMenuService } from "../interfaces/IMenuService";
+import { EventBroadcast } from "../config/eventBroadcast";
+import Logger from "../config/logger";
 
 export class MenuController {
   private menuService: IMenuService;
@@ -135,6 +137,60 @@ export class MenuController {
       res.status(200).json(menus);
     } catch (error) {
       res.status(500).json({ error: (error as Error).message });
+    }
+  };
+
+  sse = async (req: Request, res: Response): Promise<void> => {
+    // Set SSE headers
+    res.setHeader("Content-Type", "text/event-stream");
+    res.setHeader("Cache-Control", "no-cache");
+    res.setHeader("Connection", "keep-alive");
+    res.setHeader("X-Accel-Buffering", "no"); // Disable nginx buffering
+    res.flushHeaders();
+
+    Logger.info("New Menu SSE connection established");
+
+    const sendUpdate = async () => {
+      try {
+        const menus = await this.menuService.getAllMenus();
+        const data = JSON.stringify(menus);
+        res.write(`data: ${data}\n\n`);
+      } catch (error) {
+        Logger.error("Error sending Menu SSE update:", error);
+      }
+    };
+
+    try {
+      // Send initial data immediately
+      await sendUpdate();
+      Logger.info("Initial Menu SSE data sent");
+
+      // Listen for updates from global EventBroadcast
+      const listener = () => {
+        try {
+          sendUpdate();
+          Logger.info("Menu SSE update sent to client");
+        } catch (error) {
+          Logger.error("Error triggering Menu SSE update:", error);
+        }
+      };
+
+      EventBroadcast.onMenuUpdate(listener);
+
+      // Heartbeat to keep connection alive (every 30 seconds)
+      const heartbeat = setInterval(() => {
+        res.write(": heartbeat\n\n");
+      }, 30000);
+
+      // Cleanup on disconnect
+      req.on("close", () => {
+        clearInterval(heartbeat);
+        EventBroadcast.offMenuUpdate(listener);
+        Logger.info("Menu SSE connection closed");
+      });
+    } catch (error) {
+      Logger.error("Error in Menu SSE endpoint:", error);
+      res.end();
     }
   };
 }

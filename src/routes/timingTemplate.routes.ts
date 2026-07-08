@@ -4,6 +4,8 @@ import { TimingTemplateService } from "../services/TimingTemplateService";
 import { TimingTemplateRepository } from "../repositories/TimingTemplateRepository";
 import { authMiddleware } from "../middleware/auth.middleware";
 import { roleMiddleware } from "../middleware/role.middleware";
+import { timingTemplateValidation } from "../utils/validators";
+import { validate } from "../middleware/validate.middleware";
 
 const router = Router();
 
@@ -16,10 +18,10 @@ const templateController = new TimingTemplateController(templateService);
 router.use(authMiddleware, roleMiddleware(["admin"]));
 
 // Template CRUD routes
-router.post("/", templateController.create);
+router.post("/", timingTemplateValidation, validate, templateController.create);
 router.get("/", templateController.getAll);
 router.get("/:id", templateController.getById);
-router.put("/:id", templateController.update);
+router.put("/:id", timingTemplateValidation, validate, templateController.update);
 router.delete("/:id", templateController.delete);
 
 export default router;

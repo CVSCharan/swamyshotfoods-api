@@ -4,6 +4,7 @@ import { MenuService } from "../services/MenuService";
 import { MenuRepository } from "../repositories/MenuRepository";
 import { TimingTemplateRepository } from "../repositories/TimingTemplateRepository";
 import { authMiddleware } from "../middleware/auth.middleware";
+import { roleMiddleware } from "../middleware/role.middleware";
 import { menuValidation } from "../utils/validators";
 import { validate } from "../middleware/validate.middleware";
 
@@ -47,6 +48,7 @@ const menuController = new MenuController(menuService);
 router.post(
   "/",
   authMiddleware,
+  roleMiddleware(["admin"]),
   menuValidation,
   validate,
   menuController.create
@@ -70,6 +72,22 @@ router.post(
  *                 $ref: '#/components/schemas/Menu'
  */
 router.get("/", menuController.getAll);
+
+/**
+ * @swagger
+ * /menu/sse:
+ *   get:
+ *     summary: Connect to Server-Sent Events stream for menu updates
+ *     tags: [Menu]
+ *     responses:
+ *       200:
+ *         description: Stream connection established
+ *         content:
+ *           text/event-stream:
+ *             schema:
+ *               type: string
+ */
+router.get("/sse", menuController.sse);
 
 /**
  * @swagger
@@ -126,7 +144,14 @@ router.get("/:id", menuController.getById);
  *       401:
  *         description: Unauthorized
  */
-router.put("/:id", authMiddleware, menuController.update);
+router.put(
+  "/:id",
+  authMiddleware,
+  roleMiddleware(["admin"]),
+  menuValidation,
+  validate,
+  menuController.update
+);
 
 /**
  * @swagger
@@ -151,24 +176,32 @@ router.put("/:id", authMiddleware, menuController.update);
  *       401:
  *         description: Unauthorized
  */
-router.delete("/:id", authMiddleware, menuController.delete);
+router.delete(
+  "/:id",
+  authMiddleware,
+  roleMiddleware(["admin"]),
+  menuController.delete
+);
 
 // Template assignment routes (admin only)
 router.put(
   "/:id/assign-template",
   authMiddleware,
+  roleMiddleware(["admin"]),
   menuController.assignTemplate
 );
 
 router.post(
   "/bulk-assign-template",
   authMiddleware,
+  roleMiddleware(["admin"]),
   menuController.bulkAssignTemplate
 );
 
 router.put(
   "/:id/custom-timings",
   authMiddleware,
+  roleMiddleware(["admin"]),
   menuController.setCustomTimings
 );
 

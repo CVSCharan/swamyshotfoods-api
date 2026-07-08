@@ -2,6 +2,7 @@ import { EventEmitter } from "events";
 import Logger from "./logger";
 import { IStoreConfig } from "../models/StoreConfig";
 import StoreConfig from "../models/StoreConfig";
+import Menu from "../models/Menu";
 
 /**
  * Singleton Event Broadcast Service
@@ -60,6 +61,24 @@ class EventBroadcastService extends EventEmitter {
         Logger.error("MongoDB Change Stream Error:", error);
         this.hasChangeStream = false;
       });
+
+      // Also watch Menu collection
+      const menuChangeStream = Menu.watch();
+      menuChangeStream.on("change", async (change) => {
+        if (
+          change.operationType === "update" ||
+          change.operationType === "replace" ||
+          change.operationType === "insert" ||
+          change.operationType === "delete"
+        ) {
+          Logger.info(`Menu modified in DB (${change.operationType}). Broadcasting to SSE clients.`);
+          this.emit("menu:updated");
+        }
+      });
+      menuChangeStream.on("error", (error) => {
+        Logger.error("MongoDB Menu Change Stream Error:", error);
+      });
+
     } catch (error) {
       Logger.error("Failed to initialize MongoDB Change Stream. Falling back to local events:", error);
       this.hasChangeStream = false;
@@ -95,6 +114,22 @@ class EventBroadcastService extends EventEmitter {
    */
   offStoreConfigUpdate(listener: (config: IStoreConfig) => void | Promise<void>): void {
     this.off("storeConfig:updated", listener);
+  }
+
+  /**
+   * Listen for menu updates
+   * @param listener - Callback function to handle updates
+   */
+  onMenuUpdate(listener: () => void | Promise<void>): void {
+    this.on("menu:updated", listener);
+  }
+
+  /**
+   * Remove menu update listener
+   * @param listener - Callback function to remove
+   */
+  offMenuUpdate(listener: () => void | Promise<void>): void {
+    this.off("menu:updated", listener);
   }
 }
 
