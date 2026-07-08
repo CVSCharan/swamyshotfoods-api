@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import mongoose from "mongoose";
 import { IMenuService } from "../interfaces/IMenuService";
 import { EventBroadcast } from "../config/eventBroadcast";
 import Logger from "../config/logger";
@@ -30,6 +31,10 @@ export class MenuController {
 
   getById = async (req: Request, res: Response): Promise<void> => {
     try {
+      if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        res.status(400).json({ message: "Invalid ID format" });
+        return;
+      }
       const menu = await this.menuService.getMenuById(req.params.id);
       if (!menu) {
         res.status(404).json({ message: "Menu not found" });
@@ -43,6 +48,10 @@ export class MenuController {
 
   update = async (req: Request, res: Response): Promise<void> => {
     try {
+      if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        res.status(400).json({ message: "Invalid ID format" });
+        return;
+      }
       const menu = await this.menuService.updateMenu(req.params.id, req.body);
       if (!menu) {
         res.status(404).json({ message: "Menu not found" });
@@ -56,6 +65,10 @@ export class MenuController {
 
   delete = async (req: Request, res: Response): Promise<void> => {
     try {
+      if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        res.status(400).json({ message: "Invalid ID format" });
+        return;
+      }
       const success = await this.menuService.deleteMenu(req.params.id);
       if (!success) {
         res.status(404).json({ message: "Menu not found" });
@@ -69,6 +82,10 @@ export class MenuController {
 
   assignTemplate = async (req: Request, res: Response): Promise<void> => {
     try {
+      if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        res.status(400).json({ message: "Invalid ID format" });
+        return;
+      }
       const { templateKey } = req.body;
       const menu = await this.menuService.assignTemplate(
         req.params.id,
@@ -99,6 +116,10 @@ export class MenuController {
 
   setCustomTimings = async (req: Request, res: Response): Promise<void> => {
     try {
+      if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        res.status(400).json({ message: "Invalid ID format" });
+        return;
+      }
       const { morningTimings, eveningTimings } = req.body;
       const menu = await this.menuService.setCustomTimings(
         req.params.id,

@@ -113,7 +113,7 @@ router.get("/sse", menuController.sse);
  *       404:
  *         description: Menu not found
  */
-router.get("/:id([0-9a-fA-F]{24})", menuController.getById);
+router.get("/:id", menuController.getById);
 
 /**
  * @swagger
@@ -145,7 +145,7 @@ router.get("/:id([0-9a-fA-F]{24})", menuController.getById);
  *         description: Unauthorized
  */
 router.put(
-  "/:id([0-9a-fA-F]{24})",
+  "/:id",
   authMiddleware,
   roleMiddleware(["admin"]),
   menuValidation,
@@ -177,7 +177,7 @@ router.put(
  *         description: Unauthorized
  */
 router.delete(
-  "/:id([0-9a-fA-F]{24})",
+  "/:id",
   authMiddleware,
   roleMiddleware(["admin"]),
   menuController.delete
@@ -185,7 +185,7 @@ router.delete(
 
 // Template assignment routes (admin only)
 router.put(
-  "/:id([0-9a-fA-F]{24})/assign-template",
+  "/:id/assign-template",
   authMiddleware,
   roleMiddleware(["admin"]),
   menuController.assignTemplate
@@ -199,7 +199,7 @@ router.post(
 );
 
 router.put(
-  "/:id([0-9a-fA-F]{24})/custom-timings",
+  "/:id/custom-timings",
   authMiddleware,
   roleMiddleware(["admin"]),
   menuController.setCustomTimings

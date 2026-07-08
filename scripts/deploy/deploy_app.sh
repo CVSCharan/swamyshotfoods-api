@@ -45,4 +45,4 @@ pm2 start dist/server.js --name "$PM2_APP_NAME"
 pm2 save
 
 echo "Deployment successful!"
-pm2 logs swamyshotfoods-api --lines 50 --nostream || true
+pm2 logs swamyshotfoods-api --err --lines 50 --nostream || true
