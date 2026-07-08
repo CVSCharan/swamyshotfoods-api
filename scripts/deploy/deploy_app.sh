@@ -35,8 +35,10 @@ echo "Restarting PM2 process..."
 if pm2 list | grep -q "$PM2_APP_NAME"; then
     pm2 delete "$PM2_APP_NAME"
 fi
-# Kill any zombie process holding port 5001
-fuser -k 5001/tcp || true
+# Aggressively kill any process holding port 5001, even if owned by root
+sudo fuser -k 5001/tcp || true
+sudo kill -9 $(sudo lsof -t -i:5001) || true
+pkill -f node || true
 pm2 start dist/server.js --name "$PM2_APP_NAME"
 
 # 5. Save PM2 list
