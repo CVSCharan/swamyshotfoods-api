@@ -35,6 +35,8 @@ echo "Restarting PM2 process..."
 if pm2 list | grep -q "$PM2_APP_NAME"; then
     pm2 delete "$PM2_APP_NAME"
 fi
+# Kill any zombie process holding port 5001
+fuser -k 5001/tcp || true
 pm2 start dist/server.js --name "$PM2_APP_NAME"
 
 # 5. Save PM2 list
