@@ -33,10 +33,9 @@ npm run build
 echo "Restarting PM2 process..."
 # Check if app is running, if not start it, else reload
 if pm2 list | grep -q "$PM2_APP_NAME"; then
-    pm2 reload "$PM2_APP_NAME"
-else
-    pm2 start dist/server.js --name "$PM2_APP_NAME"
+    pm2 delete "$PM2_APP_NAME"
 fi
+pm2 start dist/server.js --name "$PM2_APP_NAME"
 
 # 5. Save PM2 list
 pm2 save

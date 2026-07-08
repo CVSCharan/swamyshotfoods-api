@@ -27,7 +27,7 @@ async function resetAdmin() {
     await mongoose.connect(process.env.MONGO_URI);
     console.log("Connected to MongoDB.");
 
-    const email = "cvs@swamyshotfoods.in";
+    const email = "cvs@swamyshotfoods.com";
     const password = "Password@123";
 
     const salt = await bcrypt.genSalt(10);
