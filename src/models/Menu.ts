@@ -40,7 +40,7 @@ const menuSchema = new Schema(
     timingTemplate: { type: String, default: null },
     morningTimings: { type: timingSlotSchema, default: null },
     eveningTimings: { type: timingSlotSchema, default: null },
-    ingredients: { type: String, required: true },
+    ingredients: { type: String, default: "" },
     allergens: { type: [String], default: [] },
     dietaryLabels: { type: [String], default: ["vegetarian"] },
     priority: { type: Number, required: true },

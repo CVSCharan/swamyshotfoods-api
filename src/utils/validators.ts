@@ -53,7 +53,7 @@ export const menuValidation = [
     .optional()
     .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)
     .withMessage("End time must be in HH:MM format"),
-  body("ingredients").trim().notEmpty().withMessage("Ingredients are required"),
+  body("ingredients").optional().trim(),
   body("priority").isInt().withMessage("Priority must be an integer"),
   body("imgSrc").isURL().withMessage("Image source must be a valid URL"),
   body("timingTemplate").optional({ nullable: true, checkFalsy: true }).isString(),
