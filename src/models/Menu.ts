@@ -20,6 +20,8 @@ export interface IMenu extends Document {
   morningSpecial?: boolean;
   eveningSpecial?: boolean;
   dosaSpecial?: boolean;
+  popular?: boolean;
+  chefSpecial?: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -48,6 +50,8 @@ const menuSchema = new Schema(
     morningSpecial: { type: Boolean, default: false },
     eveningSpecial: { type: Boolean, default: false },
     dosaSpecial: { type: Boolean, default: false },
+    popular: { type: Boolean, default: false },
+    chefSpecial: { type: Boolean, default: false },
   },
   {
     timestamps: true,

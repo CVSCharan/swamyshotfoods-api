@@ -61,6 +61,9 @@ export const menuValidation = [
   body("dietaryLabels").optional().isArray(),
   body("morningSpecial").optional().isBoolean(),
   body("eveningSpecial").optional().isBoolean(),
+  body("dosaSpecial").optional().isBoolean(),
+  body("popular").optional().isBoolean(),
+  body("chefSpecial").optional().isBoolean(),
 ];
 
 export const storeConfigValidation = [
