@@ -34,7 +34,33 @@ export class MenuService implements IMenuService {
     return await Promise.all(menus.map((m) => this.resolveMenuTimings(m)));
   }
 
+  private sanitizeMenuTimings(menuData: Partial<IMenu>): void {
+    if (menuData.timingTemplate === "") {
+      menuData.timingTemplate = null as any;
+    }
+
+    if (menuData.morningTimings) {
+      const { startTime, endTime } = menuData.morningTimings;
+      if (!startTime?.trim() || !endTime?.trim()) {
+        menuData.morningTimings = null as any;
+      }
+    }
+
+    if (menuData.eveningTimings) {
+      const { startTime, endTime } = menuData.eveningTimings;
+      if (!startTime?.trim() || !endTime?.trim()) {
+        menuData.eveningTimings = null as any;
+      }
+    }
+
+    if (menuData.timingTemplate && menuData.timingTemplate !== null) {
+      menuData.morningTimings = null as any;
+      menuData.eveningTimings = null as any;
+    }
+  }
+
   async createMenu(menuData: Partial<IMenu>): Promise<IMenu> {
+    this.sanitizeMenuTimings(menuData);
     return await this.menuRepository.create(menuData);
   }
 
@@ -53,6 +79,7 @@ export class MenuService implements IMenuService {
     id: string,
     menuData: Partial<IMenu>
   ): Promise<IMenu | null> {
+    this.sanitizeMenuTimings(menuData);
     return await this.menuRepository.update(id, menuData);
   }
 
