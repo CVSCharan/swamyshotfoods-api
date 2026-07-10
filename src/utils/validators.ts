@@ -35,24 +35,24 @@ export const menuValidation = [
     .withMessage("Morning timings must be an object"),
   body("morningTimings.startTime")
     .optional({ nullable: true, checkFalsy: true })
-    .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)
-    .withMessage("Start time must be in HH:MM format"),
+    .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]\s*(am|pm)?$/i)
+    .withMessage("Start time must be in HH:MM or HH:MM AM/PM format"),
   body("morningTimings.endTime")
     .optional({ nullable: true, checkFalsy: true })
-    .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)
-    .withMessage("End time must be in HH:MM format"),
+    .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]\s*(am|pm)?$/i)
+    .withMessage("End time must be in HH:MM or HH:MM AM/PM format"),
   body("eveningTimings")
     .optional({ nullable: true })
     .isObject()
     .withMessage("Evening timings must be an object"),
   body("eveningTimings.startTime")
     .optional({ nullable: true, checkFalsy: true })
-    .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)
-    .withMessage("Start time must be in HH:MM format"),
+    .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]\s*(am|pm)?$/i)
+    .withMessage("Start time must be in HH:MM or HH:MM AM/PM format"),
   body("eveningTimings.endTime")
     .optional({ nullable: true, checkFalsy: true })
-    .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)
-    .withMessage("End time must be in HH:MM format"),
+    .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]\s*(am|pm)?$/i)
+    .withMessage("End time must be in HH:MM or HH:MM AM/PM format"),
   body("ingredients").optional({ nullable: true, checkFalsy: true }).trim(),
   body("priority").isInt().withMessage("Priority must be an integer"),
   body("imgSrc").isURL().withMessage("Image source must be a valid URL"),
@@ -126,24 +126,24 @@ export const timingTemplateValidation = [
     .withMessage("Morning timings must be an object"),
   body("morningTimings.startTime")
     .optional()
-    .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)
-    .withMessage("Start time must be in HH:MM format"),
+    .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]\s*(am|pm)?$/i)
+    .withMessage("Start time must be in HH:MM or HH:MM AM/PM format"),
   body("morningTimings.endTime")
     .optional()
-    .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)
-    .withMessage("End time must be in HH:MM format"),
+    .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]\s*(am|pm)?$/i)
+    .withMessage("End time must be in HH:MM or HH:MM AM/PM format"),
   body("eveningTimings")
     .optional({ nullable: true })
     .isObject()
     .withMessage("Evening timings must be an object"),
   body("eveningTimings.startTime")
     .optional()
-    .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)
-    .withMessage("Start time must be in HH:MM format"),
+    .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]\s*(am|pm)?$/i)
+    .withMessage("Start time must be in HH:MM or HH:MM AM/PM format"),
   body("eveningTimings.endTime")
     .optional()
-    .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)
-    .withMessage("End time must be in HH:MM format"),
+    .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]\s*(am|pm)?$/i)
+    .withMessage("End time must be in HH:MM or HH:MM AM/PM format"),
   body("isActive")
     .optional()
     .isBoolean()
