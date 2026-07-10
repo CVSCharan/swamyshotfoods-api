@@ -149,3 +149,40 @@ export const timingTemplateValidation = [
     .isBoolean()
     .withMessage("isActive must be a boolean"),
 ];
+
+export const assignTemplateValidation = [
+  body("templateKey").trim().notEmpty().withMessage("Template key is required").isString(),
+];
+
+export const bulkAssignTemplateValidation = [
+  body("menuIds").isArray({ min: 1 }).withMessage("menuIds must be a non-empty array"),
+  body("menuIds.*").isMongoId().withMessage("Each menuId must be a valid Mongo ID"),
+  body("templateKey").trim().notEmpty().withMessage("Template key is required").isString(),
+];
+
+export const customTimingsValidation = [
+  body("morningTimings")
+    .optional({ nullable: true })
+    .isObject()
+    .withMessage("Morning timings must be an object"),
+  body("morningTimings.startTime")
+    .optional({ nullable: true, checkFalsy: true })
+    .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]\s*(am|pm)?$/i)
+    .withMessage("Start time must be in HH:MM or HH:MM AM/PM format"),
+  body("morningTimings.endTime")
+    .optional({ nullable: true, checkFalsy: true })
+    .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]\s*(am|pm)?$/i)
+    .withMessage("End time must be in HH:MM or HH:MM AM/PM format"),
+  body("eveningTimings")
+    .optional({ nullable: true })
+    .isObject()
+    .withMessage("Evening timings must be an object"),
+  body("eveningTimings.startTime")
+    .optional({ nullable: true, checkFalsy: true })
+    .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]\s*(am|pm)?$/i)
+    .withMessage("Start time must be in HH:MM or HH:MM AM/PM format"),
+  body("eveningTimings.endTime")
+    .optional({ nullable: true, checkFalsy: true })
+    .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]\s*(am|pm)?$/i)
+    .withMessage("End time must be in HH:MM or HH:MM AM/PM format"),
+];

@@ -5,7 +5,7 @@ import { MenuRepository } from "../repositories/MenuRepository";
 import { TimingTemplateRepository } from "../repositories/TimingTemplateRepository";
 import { authMiddleware } from "../middleware/auth.middleware";
 import { roleMiddleware } from "../middleware/role.middleware";
-import { menuValidation } from "../utils/validators";
+import { menuValidation, assignTemplateValidation, bulkAssignTemplateValidation, customTimingsValidation } from "../utils/validators";
 import { validate } from "../middleware/validate.middleware";
 
 const router = Router();
@@ -188,6 +188,8 @@ router.put(
   "/:id/assign-template",
   authMiddleware,
   roleMiddleware(["admin"]),
+  assignTemplateValidation,
+  validate,
   menuController.assignTemplate
 );
 
@@ -195,6 +197,8 @@ router.post(
   "/bulk-assign-template",
   authMiddleware,
   roleMiddleware(["admin"]),
+  bulkAssignTemplateValidation,
+  validate,
   menuController.bulkAssignTemplate
 );
 
@@ -202,6 +206,8 @@ router.put(
   "/:id/custom-timings",
   authMiddleware,
   roleMiddleware(["admin"]),
+  customTimingsValidation,
+  validate,
   menuController.setCustomTimings
 );
 
