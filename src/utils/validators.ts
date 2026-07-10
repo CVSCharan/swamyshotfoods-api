@@ -30,40 +30,40 @@ export const menuValidation = [
   body("price").isNumeric().withMessage("Price must be a number"),
   body("desc").trim().notEmpty().withMessage("Description is required"),
   body("morningTimings")
-    .optional()
+    .optional({ nullable: true })
     .isObject()
     .withMessage("Morning timings must be an object"),
   body("morningTimings.startTime")
-    .optional()
+    .optional({ nullable: true, checkFalsy: true })
     .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)
     .withMessage("Start time must be in HH:MM format"),
   body("morningTimings.endTime")
-    .optional()
+    .optional({ nullable: true, checkFalsy: true })
     .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)
     .withMessage("End time must be in HH:MM format"),
   body("eveningTimings")
-    .optional()
+    .optional({ nullable: true })
     .isObject()
     .withMessage("Evening timings must be an object"),
   body("eveningTimings.startTime")
-    .optional()
+    .optional({ nullable: true, checkFalsy: true })
     .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)
     .withMessage("Start time must be in HH:MM format"),
   body("eveningTimings.endTime")
-    .optional()
+    .optional({ nullable: true, checkFalsy: true })
     .matches(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)
     .withMessage("End time must be in HH:MM format"),
-  body("ingredients").optional().trim(),
+  body("ingredients").optional({ nullable: true, checkFalsy: true }).trim(),
   body("priority").isInt().withMessage("Priority must be an integer"),
   body("imgSrc").isURL().withMessage("Image source must be a valid URL"),
   body("timingTemplate").optional({ nullable: true, checkFalsy: true }).isString(),
-  body("allergens").optional().isArray(),
-  body("dietaryLabels").optional().isArray(),
-  body("morningSpecial").optional().isBoolean(),
-  body("eveningSpecial").optional().isBoolean(),
-  body("dosaSpecial").optional().isBoolean(),
-  body("popular").optional().isBoolean(),
-  body("chefSpecial").optional().isBoolean(),
+  body("allergens").optional({ nullable: true }).isArray(),
+  body("dietaryLabels").optional({ nullable: true }).isArray(),
+  body("morningSpecial").optional({ nullable: true }).isBoolean(),
+  body("eveningSpecial").optional({ nullable: true }).isBoolean(),
+  body("dosaSpecial").optional({ nullable: true }).isBoolean(),
+  body("popular").optional({ nullable: true }).isBoolean(),
+  body("chefSpecial").optional({ nullable: true }).isBoolean(),
 ];
 
 export const storeConfigValidation = [
